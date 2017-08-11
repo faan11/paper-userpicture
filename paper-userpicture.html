@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-image/iron-image.html">
-<link rel="import" href="../paper-avatar-behavior/paper-avatar-behavior.html">
+<script src="../js-md5/build/md5.min.js"></script>
 
 <!--
 `paper-userpicture` lets you create user avatars. If user doesn't have picture set, we'll automatically create placeholder containing user name initials. Check out the demo!
@@ -49,14 +49,19 @@ Custom property | Description | Default
                 opacity: 0.75;
             }
         </style>
+        <template is="dom-if" if="{{_imageVisible}}">
+          <iron-image id="image" src="[[image]]" sizing="cover" ></iron-image>
+        </template>
 
-        <iron-image id="image" src="[[image]]" sizing="cover" hidden$="[[!_imageVisible]]"></iron-image>
+        <template is="dom-if" if="{{!_imageVisible}}">
+          <div id="placeholder" style$="background: {{color}}">
+              <span>[[initial]]</span>
+          </div>
+        </template>
 
-        <div id="placeholder" hidden$="[[_imageVisible]]">
-            <span>[[initial]]</span>
-        </div>
-
-        <div id="name" hidden$="[[!showName]]">{{userName}}</div>
+        <template is="dom-if" if="{{!showName}}">
+          <div id="name" >{{userName}}</div>
+        </template>
     </template>
 
     <script>
@@ -64,9 +69,45 @@ Custom property | Description | Default
 
             is: 'paper-userpicture',
 
-            behaviors: [AvatarBehavior],  
+
 
             properties: {
+              colors: {
+                  type: Array,
+                  value: ['#FFA726', '#FF7043', '#26A69A', '#26C6DA', '#5C6BC0', '#7E57C2', '#AB47BC', '#66BB6A']
+              },
+
+              userName: {
+                  type: String,
+                  value: 'Average Joe',
+                  observer: '_updateBg',
+              },
+
+              userId: {
+                  type: String,
+                  observer: '_updateBg',
+              },
+
+              image: {
+                  type: String,
+                  notify:true,
+                  value:undefined,
+                  observer: '_updateBg',
+              },
+
+              color: {
+                  type: String,
+                  readOnly: true,
+                  notify: true,
+              },
+
+              initial: {
+                  type: String,
+              },
+
+              _imageVisible: {
+                  type: Boolean,
+              },
                 /*
                  * Whether to show name of user under the picture or not
                  */
@@ -77,9 +118,30 @@ Custom property | Description | Default
                     reflectToAttribute: true
                 },
             },
+            _updateBg: function() {
+                if(this.image !== undefined) {
 
+                    // Hide placeholder in favor of user picture
+                    this._imageVisible = true;
+
+                } else {
+
+                    // Calculate hash from userId
+                    var hash = md5.array('' + this.userId)[0];
+
+                    // Save color to variable and set the initial character
+                    this._setColor(this.colors[hash % this.colors.length]);
+                    this.initial = this.userName.charAt(0).toUpperCase();
+
+                    this.colorChanged(this.color);
+
+                    // Hide user picture in favor of placeholder
+                    this._imageVisible = false;
+
+                }
+            },
             colorChanged: function() {
-                this.$.placeholder.style.background = this.color;
+                //this.$.placeholder.style.background = this.color;
             }
 
         });
