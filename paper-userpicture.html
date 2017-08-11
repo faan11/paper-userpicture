@@ -34,6 +34,7 @@ Custom property | Description | Default
         color: var(--paper-userpicture-custom-text-color, rgba(255, 255, 255, 0.75));
         cursor: default;
         margin: 0 auto;
+
       }
 
       #placeholder > span {
@@ -55,7 +56,7 @@ Custom property | Description | Default
     </template>
 
     <template is="dom-if" if="{{!_imageVisible}}">
-      <div id="placeholder" style$="background: {{color}}">
+      <div id="placeholder" >
         <span>[[initial]]</span>
       </div>
     </template>
