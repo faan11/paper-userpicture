@@ -4,7 +4,7 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "js-md5": "md5#^0.4.2",
-    "iron-image": "https://github.com/PolymerElements/iron-image.git#2.0-preview"
+    "iron-image": "https://github.com/PolymerElements/iron-image.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",

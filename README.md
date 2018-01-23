@@ -10,7 +10,7 @@ Custom property | Description | Default
 `--paper-userpicture-text-size` | The font-size of the placeholder initials | `calc(var(--paper-userpicture-size) / 2)`
 
 ## Demos
-### Basic example
+### Basic example #2.0-preview
 <!---
 ```
 <custom-element-demo>
